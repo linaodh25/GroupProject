@@ -14,8 +14,7 @@ type StepId = "role" | "upload" | "extracting" | "review" | "done";
 const STEPS: StepId[] = ["role", "upload", "extracting", "review", "done"];
 const STEP_LABELS      = ["Role", "Upload CV", "Extracting", "Review", "Done"];
 
-const BACKEND_URL = "http://localhost:5000";
-
+const BACKEND_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || "http://localhost:5000";
 /* ─────────────────────────────────────────────────────────────
    Small reusable components
 ───────────────────────────────────────────────────────────── */
