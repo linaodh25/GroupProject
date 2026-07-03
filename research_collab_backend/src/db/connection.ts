@@ -1,7 +1,8 @@
 import { config } from 'dotenv';
 import { createPool } from 'mysql2/promise';
-
 config();
+
+const useSSL = process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production';
 
 const rawPool = createPool({
   host: process.env.DB_HOST || 'localhost',
@@ -12,13 +13,12 @@ const rawPool = createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  ssl: useSSL ? { rejectUnauthorized: false } : undefined,
 });
 
 type QueryablePool = typeof rawPool & {
   query<T = unknown>(sql: string, values?: unknown[]): Promise<[T, unknown]>;
   execute<T = unknown>(sql: string, values?: unknown[]): Promise<[T, unknown]>;
 };
-
 const pool = rawPool as QueryablePool;
-
 export { pool };
